@@ -28,7 +28,7 @@ class FakeStoreService:
                         source='fake_store',
                         title=product_data['title'],
                         price=product_data['price'],
-                        count=0,
+                        quantity=0,
                         description=product_data['description'],
                         image=product_data['image'],
                         category=product_data['category'],
