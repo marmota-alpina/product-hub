@@ -10,7 +10,12 @@ from schemas import ProductQuery, ProductBody, ProductPath, ProductBase, ConfigQ
 
 api_view = APIView(
     url_prefix="/product-hub/api/v1",
-    view_tags=[Tag(name="product", description="API for product management")]
+    view_tags=[Tag(name="Product", description="API for product management")]
+)
+
+config_api_view = APIView(
+    url_prefix="/product-hub/api/v1",
+    view_tags=[Tag(name="Config", description="API for config management")]
 )
 
 
@@ -90,9 +95,9 @@ class ProductSyncAPIView:
             return jsonify({"error": str(e)}), 500
 
 
-@api_view.route("/config")
+@config_api_view.route("/config")
 class ConfigListAPIView:
-    @api_view.doc(summary="Get config list")
+    @config_api_view.doc(summary="Get config list")
     def get(self, query: ConfigQuery):
         configs = Config.query.filter_by(**query.model_dump(exclude_none=True)).all()
         serialized_configs = [config.serialize() for config in configs]
@@ -100,7 +105,7 @@ class ConfigListAPIView:
 
         # Create Config
 
-    @api_view.doc(summary="Create config")
+    @config_api_view.doc(summary="Create config")
     def post(self, body: ConfigBody):
         config = Config(**body.model_dump())
 
@@ -110,9 +115,9 @@ class ConfigListAPIView:
         return jsonify(config.serialize()), 201
 
 
-@api_view.route("/config/<string:id>")
+@config_api_view.route("/config/<string:id>")
 class ConfigAPIView:
-    @api_view.doc(summary="Get config")
+    @config_api_view.doc(summary="Get config")
     def get(self, path: ProductPath):
         try:
             config = Config.query.get(path.id)
