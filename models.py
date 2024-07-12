@@ -2,6 +2,23 @@
 from config import db
 
 
+class Config(db.Model):
+    __tablename__ = 'configs'
+    id = db.Column(db.String, primary_key=True)
+    key = db.Column(db.String, nullable=False)
+    value = db.Column(db.String, nullable=False)
+
+    def __repr__(self):
+        return f'<Config {self.key}>'
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'key': self.key,
+            'value': self.value
+        }
+
+
 class Product(db.Model):
     __tablename__ = 'products'
     id = db.Column(db.String, primary_key=True)

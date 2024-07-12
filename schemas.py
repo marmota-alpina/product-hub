@@ -29,3 +29,23 @@ class ProductBase(BaseModel):
 
 class ProductBody(ProductBase):
     pass
+
+
+class ConfigBody(BaseModel):
+    key: str = Field(None, description='Config key')
+    value: str = Field(None, description='Config value')
+
+
+class ConfigPath(BaseModel):
+    id: str = Field(..., description="Config ID")
+
+
+class ConfigQuery(BaseModel):
+    key: Optional[str] = Field(None, description='Config key')
+    value: Optional[str] = Field(None, description='Config value')
+
+
+class ConfigResponse(BaseModel):
+    id: str = Field(..., description='Config ID')
+    key: str = Field(..., description='Config key')
+    value: str = Field(..., description='Config value')

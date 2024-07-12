@@ -16,6 +16,17 @@ create table products
     height      double precision not null
 );
 
+DROP TABLE IF EXISTS configs;
+CREATE TABLE configs
+(
+    id    VARCHAR(37) NOT NULL PRIMARY KEY,
+    key   VARCHAR(30) NOT NULL,
+    value VARCHAR(255) NOT NULL
+);
+
+CREATE UNIQUE INDEX config_key_uindex
+    ON configs (key);
+
 create unique index products_source_id_source_uindex
     on products (source_id, source);
 

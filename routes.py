@@ -5,12 +5,12 @@ from flask import jsonify
 
 from config import db
 from fake_store_service import FakeStoreService
-from models import Product
-from schemas import ProductQuery, ProductBody, ProductPath, ProductBase
+from models import Product, Config
+from schemas import ProductQuery, ProductBody, ProductPath, ProductBase, ConfigQuery, ConfigBody
 
 api_view = APIView(
     url_prefix="/product-hub/api/v1",
-    view_tags=[Tag(name="product",  description="API for product management")]
+    view_tags=[Tag(name="product", description="API for product management")]
 )
 
 
@@ -86,5 +86,39 @@ class ProductSyncAPIView:
             fake_store_service = FakeStoreService(db)
             fake_store_service.load_products()
             return jsonify({"success": True}), 200
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+
+@api_view.route("/config")
+class ConfigListAPIView:
+    @api_view.doc(summary="Get config list")
+    def get(self, query: ConfigQuery):
+        configs = Config.query.filter_by(**query.model_dump(exclude_none=True)).all()
+        serialized_configs = [config.serialize() for config in configs]
+        return jsonify(serialized_configs), 200
+
+        # Create Config
+
+    @api_view.doc(summary="Create config")
+    def post(self, body: ConfigBody):
+        config = Config(**body.model_dump())
+
+        config.id = str(uuid.uuid4())
+        db.session.add(config)
+        db.session.commit()
+        return jsonify(config.serialize()), 201
+
+
+@api_view.route("/config/<string:id>")
+class ConfigAPIView:
+    @api_view.doc(summary="Get config")
+    def get(self, path: ProductPath):
+        try:
+            config = Config.query.get(path.id)
+            if config:
+                return jsonify(config.serialize()), 200
+            else:
+                return jsonify({"error": "Config not found"}), 404
         except Exception as e:
             return jsonify({"error": str(e)}), 500
