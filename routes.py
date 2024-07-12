@@ -8,7 +8,10 @@ from fake_store_service import FakeStoreService
 from models import Product
 from schemas import ProductQuery, ProductBody, ProductPath, ProductBase
 
-api_view = APIView(url_prefix="/product-hub/api/v1", view_tags=[Tag(name="product", description="API for product management")])
+api_view = APIView(
+    url_prefix="/product-hub/api/v1",
+    view_tags=[Tag(name="product",  description="API for product management")]
+)
 
 
 @api_view.route("/product")

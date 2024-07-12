@@ -15,6 +15,7 @@ class ProductQuery(BaseModel):
 class ProductBase(BaseModel):
     title: str = Field(..., description='Product title')
     price: float = Field(..., description='Product price')
+    count: int = Field(..., description='Product count')
     description: str = Field(None, min_length=2, description='Product description')
     image: str = Field(None, description='Product image URL')
     category: str = Field(..., description='Product category')

@@ -28,6 +28,7 @@ class FakeStoreService:
                         source='fake_store',
                         title=product_data['title'],
                         price=product_data['price'],
+                        count=0,
                         description=product_data['description'],
                         image=product_data['image'],
                         category=product_data['category'],
@@ -49,5 +50,5 @@ class FakeStoreService:
         except requests.RequestException as e:
             print(f"Failed to load products from Fake Store API: {e}")
         except Exception as e:
-            self.db.session.rollback()  # Reverter as mudanças em caso de erro
+            self.db.session.rollback()
             print(f"An error occurred: {e}")

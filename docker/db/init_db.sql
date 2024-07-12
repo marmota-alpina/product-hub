@@ -6,6 +6,7 @@ create table products
     source   varchar,
     title       varchar          not null,
     price       double precision not null,
+    count       integer          not null default 0,
     description varchar,
     image       varchar,
     category    varchar,

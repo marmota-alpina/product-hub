@@ -9,6 +9,7 @@ class Product(db.Model):
     source = db.Column(db.String)
     title = db.Column(db.String, nullable=False)
     price = db.Column(db.Float, nullable=False)
+    count = db.Column(db.Integer, nullable=False)
     description = db.Column(db.String)
     image = db.Column(db.String)
     category = db.Column(db.String)
