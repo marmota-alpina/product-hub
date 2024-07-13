@@ -6,7 +6,7 @@ from flask import jsonify
 from config import db
 from fake_store_service import FakeStoreService
 from models import Product, Config
-from schemas import ProductQuery, ProductBody, ProductPath, ProductBase, ConfigQuery, ConfigBody
+from schemas import ProductQuery, ProductBody, ProductPath, ProductBase, ConfigQuery, ConfigBody, ConfigPath
 
 api_view = APIView(
     url_prefix="/product-hub/api/v1",
@@ -127,3 +127,12 @@ class ConfigAPIView:
                 return jsonify({"error": "Config not found"}), 404
         except Exception as e:
             return jsonify({"error": str(e)}), 500
+
+    @api_view.doc(summary="Delete config")
+    def delete(self, path: ConfigPath):
+        config = Config.query.get(path.id)
+        if config is None:
+            return jsonify({"error": "Config not found"}), 404
+        db.session.delete(config)
+        db.session.commit()
+        return jsonify({"message": "Config deleted"}), 200
