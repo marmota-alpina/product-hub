@@ -128,7 +128,7 @@ class ConfigAPIView:
         except Exception as e:
             return jsonify({"error": str(e)}), 500
 
-    @api_view.doc(summary="Delete config")
+    @config_api_view.doc(summary="Delete config")
     def delete(self, path: ConfigPath):
         config = Config.query.get(path.id)
         if config is None:
@@ -136,3 +136,13 @@ class ConfigAPIView:
         db.session.delete(config)
         db.session.commit()
         return jsonify({"message": "Config deleted"}), 200
+
+    @config_api_view.doc(summary="Update config")
+    def put(self, path: ConfigPath, body: ConfigBody):
+        config = Config.query.get(path.id)
+        if config is None:
+            return jsonify({"error": "Config not found"}), 404
+        for key, value in body.model_dump(exclude_unset=True, exclude_none=True).items():
+            setattr(config, key, value)
+        db.session.commit()
+        return jsonify(config.serialize()), 200
